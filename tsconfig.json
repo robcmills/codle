@@ -18,7 +18,7 @@
     "noUncheckedIndexedAccess": true,
     "baseUrl": ".",
     "paths": {
-      "wordle/*": ["./src/*"]
+      "codle/*": ["./src/*"]
     }
   },
   "include": [

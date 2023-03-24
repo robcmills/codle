@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { createTRPCRouter, publicProcedure } from "wordle/server/api/trpc";
+import { createTRPCRouter, publicProcedure } from "codle/server/api/trpc";
 
 export const exampleRouter = createTRPCRouter({
   hello: publicProcedure

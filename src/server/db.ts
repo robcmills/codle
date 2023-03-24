@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 
-import { env } from "wordle/env.mjs";
+import { env } from "codle/env.mjs";
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient };
 

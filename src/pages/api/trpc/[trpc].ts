@@ -1,8 +1,8 @@
 import { createNextApiHandler } from "@trpc/server/adapters/next";
 
-import { env } from "wordle/env.mjs";
-import { createTRPCContext } from "wordle/server/api/trpc";
-import { appRouter } from "wordle/server/api/root";
+import { env } from "codle/env.mjs";
+import { createTRPCContext } from "codle/server/api/trpc";
+import { appRouter } from "codle/server/api/root";
 
 // export API handler
 export default createNextApiHandler({

@@ -1,5 +1,5 @@
-import { createTRPCRouter } from "wordle/server/api/trpc";
-import { exampleRouter } from "wordle/server/api/routers/example";
+import { createTRPCRouter } from "codle/server/api/trpc";
+import { exampleRouter } from "codle/server/api/routers/example";
 
 /**
  * This is the primary router for your server.

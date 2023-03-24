@@ -16,7 +16,7 @@
  */
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-import { prisma } from "wordle/server/db";
+import { prisma } from "codle/server/db";
 
 type CreateContextOptions = Record<string, never>;
 

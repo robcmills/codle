@@ -1,8 +1,8 @@
 import { type AppType } from "next/app";
 
-import { api } from "wordle/utils/api";
+import { api } from "codle/utils/api";
 
-import "wordle/styles/globals.css";
+import "codle/styles/globals.css";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return <Component {...pageProps} />;
