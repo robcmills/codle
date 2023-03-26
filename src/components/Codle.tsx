@@ -5,6 +5,7 @@ import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
 import { Guess } from "codle/components/Guess";
 import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
+import { Button } from "codle/components/Button";
 
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
@@ -18,6 +19,8 @@ export function Codle() {
   const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
 
   const isSolved = guesses.some((guess) => guess.join("") === codle);
+  const isFull = guesses.every((guess) => guess.length === codle.length);
+  const isGameOver = isSolved || isFull;
 
   const selectedLetter = isSolved
     ? null
@@ -79,8 +82,8 @@ export function Codle() {
 
   const onChangeLanguage = (newLanguage: Language) => {
     if (newLanguage !== language) {
-      setCodle(getRandomCodle(newLanguage));
       setGuesses(guessesInitialState);
+      setCodle(getRandomCodle(newLanguage));
     }
     setLanguage(newLanguage);
   };
@@ -89,12 +92,17 @@ export function Codle() {
     setShowInstructions(false);
   };
 
+  const onClickPlayAgain = () => {
+    setGuesses(guessesInitialState);
+    setCodle(getRandomCodle(language));
+  };
+
   if (showInstructions) {
     return <Instructions onClickPlay={onClickPlay} />;
   }
 
   return (
-    <div>
+    <div className="grid justify-items-center">
       <LanguageSelect language={language} onChange={onChangeLanguage} />
       <div className="grid grid-flow-row justify-center gap-4 py-6">
         {guesses.map((guess, index) => (
@@ -107,6 +115,7 @@ export function Codle() {
           />
         ))}
       </div>
+      {isGameOver && <Button text="Play Again" onClick={onClickPlayAgain} />}
     </div>
   );
 }
