@@ -17,12 +17,16 @@ export function Codle() {
   }
   const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
 
-  const selectedLetter = guesses.reduce((selected, guess, index) => {
-    if (selected === null && guess.length < codle.length) {
-      return [index, guess.length] as [number, number];
-    }
-    return selected;
-  }, null as [number, number] | null);
+  const isSolved = guesses.some((guess) => guess.join("") === codle);
+
+  const selectedLetter = isSolved
+    ? null
+    : guesses.reduce((selected, guess, index) => {
+        if (selected === null && guess.length < codle.length) {
+          return [index, guess.length] as [number, number];
+        }
+        return selected;
+      }, null as [number, number] | null);
 
   const setLetter = useCallback(
     (letter: string) => {
@@ -56,13 +60,14 @@ export function Codle() {
 
   const onKeydown = useCallback(
     (event: KeyboardEvent) => {
+      if (isSolved) return;
       if (ALPHABET.has(event.key)) {
         setLetter(event.key);
       } else if (event.key === "Backspace") {
         deleteLetter();
       }
     },
-    [deleteLetter, setLetter]
+    [deleteLetter, isSolved, setLetter]
   );
 
   useEffect(() => {
@@ -75,6 +80,7 @@ export function Codle() {
   const onChangeLanguage = (newLanguage: Language) => {
     if (newLanguage !== language) {
       setCodle(getRandomCodle(newLanguage));
+      setGuesses(guessesInitialState);
     }
     setLanguage(newLanguage);
   };

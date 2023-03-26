@@ -17,11 +17,11 @@ export function Instructions({ onClickPlay }: { onClickPlay: () => void }) {
           the word.
         </li>
         <li>
-          <span className="font-bold text-green-500">Green:</span> This letter
+          <span className="font-bold text-green-700">Green:</span> This letter
           is in the keyword and in the correct location.
         </li>
         <li>
-          <span className="font-bold text-yellow-500">Yellow:</span> This letter
+          <span className="font-bold text-yellow-600">Yellow:</span> This letter
           is in the keyword but in a different location.
         </li>
         <li>
