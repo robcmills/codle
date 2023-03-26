@@ -16,6 +16,7 @@ export function Guess({
       selectedLetter[0] === row &&
       selectedLetter[1] === column;
     const borderColor = isSelected ? "blue-500" : "gray-500";
+
     return (
       <div
         className={`grid h-12 w-12 items-center justify-center border-4 border-${borderColor}`}
@@ -25,6 +26,7 @@ export function Guess({
       </div>
     );
   });
+
   return (
     <div className="grid grid-flow-col gap-2 text-2xl uppercase text-white">
       {letters}

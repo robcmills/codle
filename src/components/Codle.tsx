@@ -7,7 +7,6 @@ import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
 
 export function Codle() {
-  // State
   const [showInstructions, setShowInstructions] = useState(true);
   const [language, setLanguage] = useState<Language>("javascript");
   const [codle, setCodle] = useState(getRandomCodle(language));
@@ -27,7 +26,7 @@ export function Codle() {
 
   const setLetter = useCallback(
     (letter: string) => {
-      if (!selectedLetter) throw new Error("No selected letter");
+      if (!selectedLetter) return;
       const [row, column] = selectedLetter;
       const newGuesses = [...guesses];
       const newGuess = newGuesses[row];
@@ -38,17 +37,34 @@ export function Codle() {
     [guesses, selectedLetter]
   );
 
+  const deleteLetter = useCallback(() => {
+    if (!selectedLetter) return;
+    const [, column] = selectedLetter;
+    if (column === 0) return;
+    setGuesses([
+      ...guesses.map((guess, row) => {
+        if (
+          guess.length !== 0 &&
+          (row === guesses.length - 1 || guesses[row + 1]?.length === 0)
+        ) {
+          guess.pop();
+        }
+        return guess;
+      }),
+    ]);
+  }, [guesses, selectedLetter]);
+
   const onKeydown = useCallback(
     (event: KeyboardEvent) => {
-      console.log(event.key);
       if (ALPHABET.has(event.key)) {
         setLetter(event.key);
+      } else if (event.key === "Backspace") {
+        deleteLetter();
       }
     },
-    [setLetter]
+    [deleteLetter, setLetter]
   );
 
-  // Effects
   useEffect(() => {
     window.addEventListener("keydown", onKeydown);
     return () => {
@@ -56,7 +72,6 @@ export function Codle() {
     };
   }, [onKeydown]);
 
-  // Event Handlers
   const onChangeLanguage = (newLanguage: Language) => {
     if (newLanguage !== language) {
       setCodle(getRandomCodle(newLanguage));
