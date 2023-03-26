@@ -6,17 +6,17 @@ import { Guess } from "codle/components/Guess";
 import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
 import { Button } from "codle/components/Button";
-import { celebrate } from 'codle/celebrate';
+import { celebrate } from "codle/celebrate";
+
+const guessesInitialState: string[][] = [];
+for (let i = 0; i < NUMBER_OF_TRIES; i++) {
+  guessesInitialState.push([]);
+}
 
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [language, setLanguage] = useState<Language>("javascript");
   const [codle, setCodle] = useState(getRandomCodle(language));
-
-  const guessesInitialState: string[][] = [];
-  for (let i = 0; i < NUMBER_OF_TRIES; i++) {
-    guessesInitialState.push([]);
-  }
   const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
 
   const isSolved = guesses.some((guess) => guess.join("") === codle);
@@ -85,10 +85,14 @@ export function Codle() {
     if (isSolved) celebrate();
   }, [isSolved]);
 
+  const restart = () => {
+    setGuesses(guessesInitialState);
+    setCodle(getRandomCodle(language));
+  };
+
   const onChangeLanguage = (newLanguage: Language) => {
     if (newLanguage !== language) {
-      setGuesses(guessesInitialState);
-      setCodle(getRandomCodle(newLanguage));
+      restart();
     }
     setLanguage(newLanguage);
   };
@@ -98,8 +102,7 @@ export function Codle() {
   };
 
   const onClickPlayAgain = () => {
-    setGuesses(guessesInitialState);
-    setCodle(getRandomCodle(language));
+    restart();
   };
 
   if (showInstructions) {
