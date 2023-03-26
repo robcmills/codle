@@ -6,6 +6,7 @@ import { Guess } from "codle/components/Guess";
 import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
 import { Button } from "codle/components/Button";
+import { celebrate } from 'codle/celebrate';
 
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
@@ -79,6 +80,10 @@ export function Codle() {
       window.removeEventListener("keydown", onKeydown);
     };
   }, [onKeydown]);
+
+  useEffect(() => {
+    if (isSolved) celebrate();
+  }, [isSolved]);
 
   const onChangeLanguage = (newLanguage: Language) => {
     if (newLanguage !== language) {
