@@ -1,9 +1,11 @@
+import { type Language } from "codle/types/Language";
+
 export function LanguageSelect({
   language,
-  setLanguage,
+  onChange,
 }: {
   language: string;
-  setLanguage: (language: string) => void;
+  onChange: (language: Language) => void;
 }) {
   const selectClassName =
     "bg-[#343440] text-white rounded-md p-2 border-x-8 border-[#343440]";
@@ -14,7 +16,7 @@ export function LanguageSelect({
       <select
         className={selectClassName}
         value={language}
-        onChange={(e) => setLanguage(e.target.value)}
+        onChange={(e) => onChange(e.target.value as Language)}
       >
         <option className={optionClassName} value="javascript">
           JavaScript
