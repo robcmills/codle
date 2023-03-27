@@ -11,7 +11,7 @@ import { Keyboard } from "codle/components/Keyboard";
 
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
-  const [language, setLanguage] = useState<Language>("javascript");
+  const [language, setLanguage] = useState<Language>("JavaScript");
   const [codle, setCodle] = useState(getRandomCodle(language));
 
   const guessesInitialState: string[][] = [];
@@ -23,6 +23,7 @@ export function Codle() {
   const isSolved = guesses.some((guess) => guess.join("") === codle);
   const isFull = guesses.every((guess) => guess.length === codle.length);
   const isGameOver = isSolved || isFull;
+  const isCodleRevealed = !isSolved && isFull;
 
   const selectedLetter = isSolved
     ? null
@@ -111,9 +112,9 @@ export function Codle() {
   }
 
   return (
-    <div className="grid justify-items-center p-4">
+    <div className="grid justify-items-center gap-4 p-4">
       <LanguageSelect language={language} onChange={onChangeLanguage} />
-      <div className="grid w-full grid-cols-1 justify-center gap-4 py-6">
+      <div className="grid w-full grid-cols-1 justify-center gap-4 py-2">
         {guesses.map((guess, index) => (
           <Guess
             codle={codle}
@@ -124,6 +125,14 @@ export function Codle() {
           />
         ))}
       </div>
+      {isCodleRevealed && (
+        <Guess
+          codle={codle}
+          guess={codle.split("")}
+          row={-1}
+          selectedLetter={null}
+        />
+      )}
       {isGameOver ? (
         <Button text="Play Again" onClick={onClickPlayAgain} />
       ) : (

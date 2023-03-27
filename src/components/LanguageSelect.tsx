@@ -1,3 +1,4 @@
+import { CODLES } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
 
 export function LanguageSelect({
@@ -11,6 +12,12 @@ export function LanguageSelect({
     "bg-[#343440] text-white rounded-md p-2 border-x-8 border-[#343440]";
   const optionClassName = "bg-[#343440] text-white";
 
+  const options = Object.keys(CODLES).map((language) => (
+    <option className={optionClassName} key={language} value={language}>
+      {language}
+    </option>
+  ));
+
   return (
     <div className="grid justify-center">
       <select
@@ -18,12 +25,7 @@ export function LanguageSelect({
         value={language}
         onChange={(e) => onChange(e.target.value as Language)}
       >
-        <option className={optionClassName} value="javascript">
-          JavaScript
-        </option>
-        <option className={optionClassName} value="python">
-          Python
-        </option>
+        {options}
       </select>
     </div>
   );

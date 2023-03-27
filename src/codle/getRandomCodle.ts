@@ -2,7 +2,7 @@ import { type Codle } from "codle/types/Codle";
 import { type Language } from "codle/types/Language";
 
 export const CODLES = {
-  javascript: [
+  JavaScript: [
     "arguments",
     "async",
     "await",
@@ -50,7 +50,7 @@ export const CODLES = {
     "with",
     "yield",
   ],
-  python: [
+  Python: [
     "False",
     "def",
     "if",
@@ -84,6 +84,44 @@ export const CODLES = {
     "continue",
     "global",
     "pass",
+  ],
+  TypeScript: [
+    "abstract",
+    "any",
+    "as",
+    "asserts",
+    "bigint",
+    "boolean",
+    "constructor",
+    "declare",
+    "enum",
+    "from",
+    "get",
+    "global",
+    "implements",
+    "infer",
+    "interface",
+    "is",
+    "let",
+    "module",
+    "namespace",
+    "never",
+    "number",
+    "of",
+    "package",
+    "private",
+    "protected",
+    "public",
+    "readonly",
+    "require",
+    "set",
+    "static",
+    "string",
+    "symbol",
+    "type",
+    "typeof",
+    "void",
+    "yield",
   ],
 } as const;
 
