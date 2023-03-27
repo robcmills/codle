@@ -9,15 +9,15 @@ import { Button } from "codle/components/Button";
 import { celebrate } from "codle/celebrate";
 import { Keyboard } from "codle/components/Keyboard";
 
-const guessesInitialState: string[][] = [];
-for (let i = 0; i < NUMBER_OF_TRIES; i++) {
-  guessesInitialState.push([]);
-}
-
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [language, setLanguage] = useState<Language>("javascript");
   const [codle, setCodle] = useState(getRandomCodle(language));
+
+  const guessesInitialState: string[][] = [];
+  for (let i = 0; i < NUMBER_OF_TRIES; i++) {
+    guessesInitialState.push([]);
+  }
   const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
 
   const isSolved = guesses.some((guess) => guess.join("") === codle);
