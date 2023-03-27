@@ -111,9 +111,9 @@ export function Codle() {
   }
 
   return (
-    <div className="grid justify-items-center">
+    <div className="grid justify-items-center p-4">
       <LanguageSelect language={language} onChange={onChangeLanguage} />
-      <div className="grid grid-flow-row justify-center gap-4 py-6">
+      <div className="grid w-full grid-cols-1 justify-center gap-4 py-6">
         {guesses.map((guess, index) => (
           <Guess
             codle={codle}

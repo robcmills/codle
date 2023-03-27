@@ -35,5 +35,5 @@ export function Keyboard({
       </div>
     );
   });
-  return <div className="grid grid-flow-row gap-2 p-4 text-white">{keys}</div>;
+  return <div className="grid grid-flow-row gap-2 text-white">{keys}</div>;
 }

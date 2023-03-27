@@ -10,7 +10,7 @@ export function Guess({
   selectedLetter: [number, number] | null;
 }) {
   const letters = codle.split("").map((codleChar, column) => {
-    const guessChar = guess[column] as string;
+    const guessChar = guess[column] || "";
 
     // Todo: Handle case where guess letters are repeated
     const isSubmitted = guess.length === codle.length;
@@ -33,7 +33,7 @@ export function Guess({
 
     return (
       <div
-        className={`${backgroundColor} grid h-12 w-12 items-center justify-center ${border} ${borderColor}`}
+        className={`${backgroundColor} grid place-items-center ${border} ${borderColor}`}
         key={column}
       >
         {guessChar}
@@ -42,7 +42,12 @@ export function Guess({
   });
 
   return (
-    <div className="grid grid-flow-col gap-2 text-2xl uppercase text-white">
+    <div
+      className="grid h-[3rem] justify-center gap-2 text-2xl uppercase text-white"
+      style={{
+        gridTemplateColumns: `repeat(${codle.length}, minmax(1.5rem, 3rem))`,
+      }}
+    >
       {letters}
     </div>
   );
