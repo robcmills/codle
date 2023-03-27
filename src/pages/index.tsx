@@ -11,7 +11,7 @@ const Home: NextPage = () => {
         <meta name="description" content="Wordle clone for coders" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="grid min-h-screen auto-rows-min justify-center bg-gradient-to-b from-[#15162c] to-[#343440]">
+      <main className="absolute top-0 bottom-0 left-0 right-0 grid auto-rows-min justify-center bg-gradient-to-b from-[#15162c] to-[#343440]">
         <Header />
         <Codle />
       </main>

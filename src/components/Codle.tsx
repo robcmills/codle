@@ -7,6 +7,7 @@ import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
 import { Button } from "codle/components/Button";
 import { celebrate } from "codle/celebrate";
+import { Keyboard } from "codle/components/Keyboard";
 
 const guessesInitialState: string[][] = [];
 for (let i = 0; i < NUMBER_OF_TRIES; i++) {
@@ -123,7 +124,11 @@ export function Codle() {
           />
         ))}
       </div>
-      {isGameOver && <Button text="Play Again" onClick={onClickPlayAgain} />}
+      {isGameOver ? (
+        <Button text="Play Again" onClick={onClickPlayAgain} />
+      ) : (
+        <Keyboard deleteLetter={deleteLetter} setLetter={setLetter} />
+      )}
     </div>
   );
 }
