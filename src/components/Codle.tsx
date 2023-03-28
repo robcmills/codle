@@ -87,16 +87,16 @@ export function Codle() {
     if (isSolved) celebrate();
   }, [isSolved]);
 
-  const restart = () => {
+  const restart = (withLanguage: Language = language) => {
     setGuesses(guessesInitialState);
-    setCodle(getRandomCodle(language));
+    setCodle(getRandomCodle(withLanguage));
   };
 
   const onChangeLanguage = (newLanguage: Language) => {
-    if (newLanguage !== language) {
-      restart();
-    }
     setLanguage(newLanguage);
+    if (newLanguage !== language) {
+      restart(newLanguage);
+    }
   };
 
   const onClickPlay = () => {
