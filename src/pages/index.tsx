@@ -9,7 +9,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Codle</title>
         <meta name="description" content="Wordle clone for coders" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/favicon.svg" />
       </Head>
       <main className="absolute top-0 bottom-0 left-0 right-0 grid auto-rows-min justify-center overflow-y-auto bg-gradient-to-b from-[#15162c] to-[#343440]">
         <Header />
