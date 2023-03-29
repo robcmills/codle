@@ -112,7 +112,7 @@ export function Codle() {
   }
 
   return (
-    <div className="grid justify-items-center gap-4 p-4">
+    <div className="container grid justify-items-center gap-4 p-4">
       <LanguageSelect language={language} onChange={onChangeLanguage} />
       <div className="grid w-full grid-cols-1 justify-center gap-4 py-2">
         {guesses.map((guess, index) => (
