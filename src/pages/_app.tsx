@@ -4,13 +4,17 @@ import { api } from "codle/utils/api";
 
 import "codle/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Layout } from "codle/components/Layout";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const App: AppType = ({ Component, pageProps }) => {
+  console.log("App");
   return (
     <ClerkProvider {...pageProps}>
-      <Component {...pageProps} />
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
     </ClerkProvider>
   );
 };
 
-export default api.withTRPC(MyApp);
+export default api.withTRPC(App);

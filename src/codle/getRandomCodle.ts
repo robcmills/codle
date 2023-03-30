@@ -1,4 +1,3 @@
-import { type Codle } from "codle/types/Codle";
 import { type Language } from "codle/types/Language";
 
 export const CODLES = {
@@ -980,7 +979,15 @@ export const CODLES = {
   ],
 } as const;
 
-export function getRandomCodle(language: Language): Codle<Language> {
-  const randomIndex = Math.floor(Math.random() * CODLES[language].length);
-  return CODLES[language][randomIndex] as Codle<Language>;
+export function getRandomCodle({
+  language,
+  exclude = [],
+}: {
+  language: Language;
+  exclude: string[];
+}) {
+  let keywords = CODLES[language] as unknown as string[];
+  keywords = keywords.filter((keyword) => !exclude.includes(keyword));
+  const randomIndex = Math.floor(Math.random() * keywords.length);
+  return keywords[randomIndex] as string;
 }

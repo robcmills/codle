@@ -1,17 +1,6 @@
-import { z } from "zod";
-
-import { createTRPCRouter, publicProcedure } from "codle/server/api/trpc";
+import { createTRPCRouter } from "codle/server/api/trpc";
+import { createGame } from "codle/server/api/createGame";
 
 export const gameRouter = createTRPCRouter({
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return {
-        greeting: `Hello ${input.text}`,
-      };
-    }),
-  // Todo: Convert to a private procedure
-  getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.game.findMany();
-  }),
+  create: createGame,
 });

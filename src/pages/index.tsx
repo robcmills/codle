@@ -1,9 +1,22 @@
-import { Codle } from "codle/components/Codle";
-import { Header } from "codle/components/Header";
 import { type NextPage } from "next";
 import Head from "next/head";
+import { Instructions } from "codle/components/Instructions";
+import { api } from "codle/utils/api";
+// import { useEffect } from "react";
 
-const Home: NextPage = () => {
+const IndexPage: NextPage = () => {
+  console.log("IndexPage");
+
+  const { mutate } = api.game.create.useMutation();
+  // useEffect(() => {
+  //   mutate({ language: "JavaScript" });
+  // }, [mutate]);
+
+  const onClickPlay = () => {
+    console.log("onClickPlay");
+    mutate({ language: "JavaScript" });
+  };
+
   return (
     <>
       <Head>
@@ -11,12 +24,9 @@ const Home: NextPage = () => {
         <meta name="description" content="Wordle clone for coders" />
         <link rel="icon" href="/favicon.svg" />
       </Head>
-      <main className="absolute top-0 bottom-0 left-0 right-0 grid auto-rows-min grid-cols-1 justify-items-center overflow-y-auto bg-gradient-to-b from-[#15162c] to-[#343440]">
-        <Header />
-        <Codle />
-      </main>
+      <Instructions onClickPlay={onClickPlay} />
     </>
   );
 };
 
-export default Home;
+export default IndexPage;
