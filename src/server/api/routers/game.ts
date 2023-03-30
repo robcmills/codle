@@ -2,7 +2,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "codle/server/api/trpc";
 
-export const exampleRouter = createTRPCRouter({
+export const gameRouter = createTRPCRouter({
   hello: publicProcedure
     .input(z.object({ text: z.string() }))
     .query(({ input }) => {
@@ -10,7 +10,8 @@ export const exampleRouter = createTRPCRouter({
         greeting: `Hello ${input.text}`,
       };
     }),
+  // Todo: Convert to a private procedure
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.prisma.example.findMany();
+    return ctx.prisma.game.findMany();
   }),
 });
