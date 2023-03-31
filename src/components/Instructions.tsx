@@ -1,7 +1,13 @@
 import { Button } from "codle/components/Button";
 import { NUMBER_OF_TRIES } from "codle/constants";
 
-export function Instructions({ onClickPlay }: { onClickPlay: () => void }) {
+export function Instructions({
+  isLoading,
+  onClickPlay,
+}: {
+  isLoading: boolean;
+  onClickPlay: () => void;
+}) {
   return (
     <section className="m-4 border border-gray-500 bg-zinc-900 p-4 text-white">
       <h2 className="text-3xl">How To Play</h2>
@@ -30,7 +36,11 @@ export function Instructions({ onClickPlay }: { onClickPlay: () => void }) {
         </li>
       </ul>
       <div className="grid justify-center pt-6 pb-3">
-        <Button text="Play" onClick={onClickPlay} />
+        {isLoading ? (
+          "Loading..."
+        ) : (
+          <Button text="Play" onClick={onClickPlay} />
+        )}
       </div>
     </section>
   );

@@ -1,8 +1,10 @@
+import { type NextPage } from "next";
 import { useRouter } from "next/router";
 
-export default function GamePage() {
-  console.log("GamePage");
+const GamePage: NextPage = () => {
   const router = useRouter();
   const { id } = router.query;
   return <div>GamePage {id}</div>;
-}
+};
+
+export default GamePage;

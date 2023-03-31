@@ -1,4 +1,5 @@
 import { type AppType } from "next/app";
+import Head from "next/head";
 
 import { api } from "codle/utils/api";
 
@@ -7,9 +8,13 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { Layout } from "codle/components/Layout";
 
 const App: AppType = ({ Component, pageProps }) => {
-  console.log("App");
   return (
     <ClerkProvider {...pageProps}>
+      <Head>
+        <title>Codle</title>
+        <meta name="description" content="Wordle clone for coders" />
+        <link rel="icon" href="/favicon.svg" />
+      </Head>
       <Layout>
         <Component {...pageProps} />
       </Layout>
