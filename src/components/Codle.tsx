@@ -12,7 +12,7 @@ import { Keyboard } from "codle/components/Keyboard";
 export function Codle() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [language, setLanguage] = useState<Language>("JavaScript");
-  const [codle, setCodle] = useState(getRandomCodle(language));
+  const [codle, setCodle] = useState(getRandomCodle({ language, exclude: [] }));
 
   const guessesInitialState: string[][] = [];
   for (let i = 0; i < NUMBER_OF_TRIES; i++) {
@@ -89,7 +89,7 @@ export function Codle() {
 
   const restart = (withLanguage: Language = language) => {
     setGuesses(guessesInitialState);
-    setCodle(getRandomCodle(withLanguage));
+    setCodle(getRandomCodle({ language: withLanguage, exclude: [] }));
   };
 
   const onChangeLanguage = (newLanguage: Language) => {
