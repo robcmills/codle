@@ -15,7 +15,7 @@ export function User() {
     setIsDropdownOpen(false);
   };
 
-  const signedIn = user && (
+  const signedIn = !user ? null : (
     <div className="relative hover:cursor-pointer" onClick={onClickAvatar}>
       <UserAvatar user={user} />
       {isDropdownOpen && (
