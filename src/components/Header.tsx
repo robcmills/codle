@@ -9,7 +9,6 @@ export function Header() {
       </Link>
       <div className="absolute top-0 right-0 bottom-0 grid p-5">
         <User />
-        {/* Todo: Add dropdown to sign out */}
       </div>
     </div>
   );
