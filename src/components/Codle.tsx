@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { Instructions } from "codle/components/Instructions";
 import { LanguageSelect } from "codle/components/LanguageSelect";
 import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
 import { Guess } from "codle/components/Guess";
@@ -10,7 +9,6 @@ import { celebrate } from "codle/celebrate";
 import { Keyboard } from "codle/components/Keyboard";
 
 export function Codle() {
-  const [showInstructions, setShowInstructions] = useState(true);
   const [language, setLanguage] = useState<Language>("JavaScript");
   const [codle, setCodle] = useState(getRandomCodle({ language, exclude: [] }));
 
@@ -99,17 +97,9 @@ export function Codle() {
     }
   };
 
-  const onClickPlay = () => {
-    setShowInstructions(false);
-  };
-
   const onClickPlayAgain = () => {
     restart();
   };
-
-  if (showInstructions) {
-    return <Instructions onClickPlay={onClickPlay} />;
-  }
 
   return (
     <div className="container grid justify-items-center gap-4 p-4">
