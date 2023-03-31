@@ -1,20 +1,34 @@
 import { useCallback, useEffect, useState } from "react";
-import { LanguageSelect } from "codle/components/LanguageSelect";
-import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
-import { Guess } from "codle/components/Guess";
-import { getRandomCodle } from "codle/codle/getRandomCodle";
-import { type Language } from "codle/types/Language";
-import { Button } from "codle/components/Button";
-import { celebrate } from "codle/celebrate";
-import { Keyboard } from "codle/components/Keyboard";
 
-export function Codle() {
-  const [language, setLanguage] = useState<Language>("JavaScript");
-  const [codle, setCodle] = useState(getRandomCodle({ language, exclude: [] }));
+import { Button } from "codle/components/Button";
+import { Guess } from "codle/components/Guess";
+import { Keyboard } from "codle/components/Keyboard";
+import { LanguageSelect } from "codle/components/LanguageSelect";
+
+import { celebrate } from "codle/celebrate";
+import { getRandomCodle } from "codle/codle/getRandomCodle";
+import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
+
+import { type Language } from "codle/types/Language";
+import { type Game } from "codle/types/Game";
+
+export function Codle({ game }: { game?: Game }) {
+  console.log({ game });
+  const languageInitialState = (game?.language as Language) ?? "JavaScript";
+  const [language, setLanguage] = useState<Language>(languageInitialState);
+
+  const codleInitialState =
+    game?.codle ?? getRandomCodle({ language, exclude: [] });
+  const [codle, setCodle] = useState(codleInitialState);
 
   const guessesInitialState: string[][] = [];
   for (let i = 0; i < NUMBER_OF_TRIES; i++) {
-    guessesInitialState.push([]);
+    const guess = game?.guesses[i]?.letters;
+    if (typeof guess === "string") {
+      guessesInitialState.push(guess.split(""));
+    } else {
+      guessesInitialState.push([]);
+    }
   }
   const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
 
