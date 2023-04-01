@@ -13,6 +13,7 @@ import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
 import { type Language } from "codle/types/Language";
 import { type Game } from "codle/types/Game";
 import { type ClientGuess } from "codle/types/ClientGuess";
+import { useRouter } from "next/router";
 
 export function Codle({
   isSignedIn,
@@ -115,6 +116,13 @@ export function Codle({
     if (isSolved) celebrate();
   }, [isSolved]);
 
+  const {
+    mutateAsync: createGame,
+    isLoading: isCreatingNextGame,
+    isSuccess: isNextGameCreated,
+  } = api.game.create.useMutation();
+  const router = useRouter();
+
   const restart = (withLanguage: Language = language) => {
     setGuesses(guessesInitialState);
     setCodle(getRandomCodle({ language: withLanguage, exclude: [] }));
@@ -127,12 +135,17 @@ export function Codle({
     }
   };
 
-  const onClickPlayAgain = () => {
-    restart();
+  const onClickPlayAgain = async () => {
+    if (isSignedIn) {
+      const nextGame = await createGame({ language });
+      router.push(`/games/${nextGame.id}`).catch(console.error);
+    } else {
+      restart();
+    }
   };
 
   return (
-    <div className="container grid justify-items-center gap-4 p-4">
+    <div className="container grid justify-items-center gap-4 p-4 text-white">
       <LanguageSelect language={language} onChange={onChangeLanguage} />
       <div className="grid w-full grid-cols-1 justify-center gap-4 py-2">
         {guesses.map((guess, index) => (
@@ -154,7 +167,11 @@ export function Codle({
         />
       )}
       {isGameOver ? (
-        <Button text="Play Again" onClick={onClickPlayAgain} />
+        isCreatingNextGame || isNextGameCreated ? (
+          <p className="p-2">Loading...</p>
+        ) : (
+          <Button text="Play Again" onClick={onClickPlayAgain} />
+        )
       ) : (
         <Keyboard deleteLetter={deleteLetter} setLetter={setLetter} />
       )}

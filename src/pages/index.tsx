@@ -7,9 +7,12 @@ import { useUser } from "@clerk/nextjs";
 const IndexPage: NextPage = () => {
   const router = useRouter();
   const { isSignedIn } = useUser();
-  const { data: game, isLoading } = api.game.get.useQuery(undefined, {
-    enabled: !!isSignedIn,
-  });
+  const { data: game, isLoading } = api.game.get.useQuery(
+    {},
+    {
+      enabled: !!isSignedIn,
+    }
+  );
 
   const onClickPlay = () => {
     if (isSignedIn && game) {
