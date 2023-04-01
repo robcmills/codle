@@ -11,6 +11,7 @@ import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
 
 import { type Language } from "codle/types/Language";
 import { type Game } from "codle/types/Game";
+import { type ClientGuess } from "codle/types/ClientGuess";
 
 export function Codle({ game }: { game?: Game }) {
   console.log({ game });
@@ -21,27 +22,32 @@ export function Codle({ game }: { game?: Game }) {
     game?.codle ?? getRandomCodle({ language, exclude: [] });
   const [codle, setCodle] = useState(codleInitialState);
 
-  const guessesInitialState: string[][] = [];
+  const guessesInitialState: ClientGuess[] = [];
   for (let i = 0; i < NUMBER_OF_TRIES; i++) {
-    const guess = game?.guesses[i]?.letters;
-    if (typeof guess === "string") {
-      guessesInitialState.push(guess.split(""));
+    const guess = game?.guesses[i];
+    if (guess) {
+      guessesInitialState.push({ id: guess.id, letters: guess.letters });
     } else {
-      guessesInitialState.push([]);
+      guessesInitialState.push({ id: null, letters: "" });
     }
   }
-  const [guesses, setGuesses] = useState<string[][]>(guessesInitialState);
+  const [guesses, setGuesses] = useState<ClientGuess[]>(guessesInitialState);
+  useEffect(() => {
+    console.log({ guesses });
+  }, [guesses]);
 
-  const isSolved = guesses.some((guess) => guess.join("") === codle);
-  const isFull = guesses.every((guess) => guess.length === codle.length);
+  const isSolved = guesses.some(({ letters }) => letters === codle);
+  const isFull = guesses.every(
+    ({ letters }) => letters.length === codle.length
+  );
   const isGameOver = isSolved || isFull;
   const isCodleRevealed = !isSolved && isFull;
 
   const selectedLetter = isSolved
     ? null
-    : guesses.reduce((selected, guess, index) => {
-        if (selected === null && guess.length < codle.length) {
-          return [index, guess.length] as [number, number];
+    : guesses.reduce((selected, { letters }, index) => {
+        if (selected === null && letters.length < codle.length) {
+          return [index, letters.length] as [number, number];
         }
         return selected;
       }, null as [number, number] | null);
@@ -53,7 +59,9 @@ export function Codle({ game }: { game?: Game }) {
       const newGuesses = [...guesses];
       const newGuess = newGuesses[row];
       if (!newGuess) throw new Error("Invalid selected row");
-      newGuess[column] = letter;
+      const lettersArray = newGuess.letters.split("");
+      lettersArray[column] = letter;
+      newGuess.letters = lettersArray.join("");
       setGuesses(newGuesses);
     },
     [guesses, selectedLetter]
@@ -66,10 +74,10 @@ export function Codle({ game }: { game?: Game }) {
     setGuesses([
       ...guesses.map((guess, row) => {
         if (
-          guess.length !== 0 &&
-          (row === guesses.length - 1 || guesses[row + 1]?.length === 0)
+          guess.letters.length !== 0 &&
+          (row === guesses.length - 1 || guesses[row + 1]?.letters.length === 0)
         ) {
-          guess.pop();
+          guess.letters = guess.letters.slice(0, -1);
         }
         return guess;
       }),
@@ -122,7 +130,7 @@ export function Codle({ game }: { game?: Game }) {
         {guesses.map((guess, index) => (
           <Guess
             codle={codle}
-            guess={guess}
+            guess={guess.letters.split("")}
             key={index}
             row={index}
             selectedLetter={selectedLetter}
