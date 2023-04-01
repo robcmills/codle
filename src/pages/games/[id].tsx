@@ -1,3 +1,4 @@
+import { useUser } from "@clerk/nextjs";
 import { Codle } from "codle/components/Codle";
 import { api } from "codle/utils/api";
 import { type NextPage } from "next";
@@ -6,6 +7,7 @@ import { useRouter } from "next/router";
 // Todo: Redirect to /play if not signed in
 
 const GamePage: NextPage = () => {
+  const { isSignedIn } = useUser();
   const router = useRouter();
   let id = router.query.id;
   if (Array.isArray(id)) {
@@ -26,7 +28,7 @@ const GamePage: NextPage = () => {
     return <div>Loading...</div>;
   }
 
-  return <Codle game={game} />;
+  return <Codle isSignedIn={!!isSignedIn} game={game} />;
 };
 
 export default GamePage;

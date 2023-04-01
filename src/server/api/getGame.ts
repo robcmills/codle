@@ -1,4 +1,5 @@
 import { getRandomCodle } from "codle/codle/getRandomCodle";
+import { NUMBER_OF_TRIES } from "codle/constants";
 import { privateProcedure } from "codle/server/api/trpc";
 
 /**
@@ -30,5 +31,14 @@ export const getGame = privateProcedure.query(async ({ ctx }) => {
       playerId,
     },
   });
+
+  const newGuesses = [];
+  for (let i = 0; i < NUMBER_OF_TRIES; i++) {
+    newGuesses.push({ letters: "", gameId: newGame.id, playerId });
+  }
+  await ctx.prisma.guess.createMany({
+    data: newGuesses,
+  });
+
   return newGame;
 });

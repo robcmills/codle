@@ -2,6 +2,7 @@ import { z } from "zod";
 import { privateProcedure } from "codle/server/api/trpc";
 import { CODLES, getRandomCodle } from "codle/codle/getRandomCodle";
 import { type Language } from "codle/types/Language";
+import { NUMBER_OF_TRIES } from "codle/constants";
 
 export const createGame = privateProcedure
   .input(
@@ -24,5 +25,14 @@ export const createGame = privateProcedure
         playerId,
       },
     });
+
+    const newGuesses = [];
+    for (let i = 0; i < NUMBER_OF_TRIES; i++) {
+      newGuesses.push({ letters: "", gameId: game.id, playerId });
+    }
+    await ctx.prisma.guess.createMany({
+      data: newGuesses,
+    });
+
     return game;
   });

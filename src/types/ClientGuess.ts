@@ -1,1 +1,1 @@
-export type ClientGuess = { id: string | null; letters: string };
+export type ClientGuess = { id?: string; letters: string };

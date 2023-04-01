@@ -10,7 +10,6 @@ export const getGameById = privateProcedure
   .query(async ({ ctx, input }) => {
     const { id } = input;
     const playerId = ctx.userId;
-    console.log({ playerId });
     return await ctx.prisma.game.findFirstOrThrow({
       where: { id, playerId },
       include: { guesses: true },

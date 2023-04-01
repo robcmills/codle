@@ -5,6 +5,7 @@ import { Guess } from "codle/components/Guess";
 import { Keyboard } from "codle/components/Keyboard";
 import { LanguageSelect } from "codle/components/LanguageSelect";
 
+import { api } from "codle/utils/api";
 import { celebrate } from "codle/celebrate";
 import { getRandomCodle } from "codle/codle/getRandomCodle";
 import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
@@ -13,8 +14,13 @@ import { type Language } from "codle/types/Language";
 import { type Game } from "codle/types/Game";
 import { type ClientGuess } from "codle/types/ClientGuess";
 
-export function Codle({ game }: { game?: Game }) {
-  console.log({ game });
+export function Codle({
+  isSignedIn,
+  game,
+}: {
+  isSignedIn: boolean;
+  game?: Game;
+}) {
   const languageInitialState = (game?.language as Language) ?? "JavaScript";
   const [language, setLanguage] = useState<Language>(languageInitialState);
 
@@ -28,13 +34,15 @@ export function Codle({ game }: { game?: Game }) {
     if (guess) {
       guessesInitialState.push({ id: guess.id, letters: guess.letters });
     } else {
-      guessesInitialState.push({ id: null, letters: "" });
+      guessesInitialState.push({ letters: "" });
     }
   }
   const [guesses, setGuesses] = useState<ClientGuess[]>(guessesInitialState);
+
+  const { mutate: updateGame } = api.game.update.useMutation();
   useEffect(() => {
-    console.log({ guesses });
-  }, [guesses]);
+    if (isSignedIn && game) updateGame({ id: game.id, guesses });
+  }, [isSignedIn, game, guesses, updateGame]);
 
   const isSolved = guesses.some(({ letters }) => letters === codle);
   const isFull = guesses.every(

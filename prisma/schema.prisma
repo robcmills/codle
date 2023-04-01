@@ -15,7 +15,7 @@ model Game {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  playerId  String   @unique
+  playerId  String
   codle     String
   language  String
   guesses   Guess[]
@@ -27,8 +27,8 @@ model Guess {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  playerId  String   @unique
-  gameId    String   @unique
+  playerId  String
+  gameId    String
   game      Game     @relation(fields: [gameId], references: [id])
   letters   String
 
