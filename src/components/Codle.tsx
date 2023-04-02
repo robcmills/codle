@@ -39,9 +39,13 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   const [guesses, setGuesses] = useState<ClientGuess[]>(guessesInitialState);
 
   const { mutate: updateGame } = api.game.update.useMutation();
-  useEffect(() => {
-    if (isSignedIn && game) updateGame({ id: game.id, guesses });
-  }, [isSignedIn, game, guesses, updateGame]);
+
+  const updateGuesses = useCallback(
+    (newGuesses: ClientGuess[]) => {
+      if (isSignedIn && game) updateGame({ id: game.id, guesses: newGuesses });
+    },
+    [isSignedIn, game, updateGame]
+  );
 
   const isSolved = guesses.some(({ letters }) => letters === codle);
   const isFull = guesses.every(
@@ -70,15 +74,16 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
       lettersArray[column] = letter;
       newGuess.letters = lettersArray.join("");
       setGuesses(newGuesses);
+      updateGuesses(newGuesses);
     },
-    [guesses, selectedLetter]
+    [guesses, selectedLetter, updateGuesses]
   );
 
   const deleteLetter = useCallback(() => {
     if (!selectedLetter) return;
     const [, column] = selectedLetter;
     if (column === 0) return;
-    setGuesses([
+    const newGuesses = [
       ...guesses.map((guess, row) => {
         if (
           guess.letters.length !== 0 &&
@@ -88,8 +93,10 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
         }
         return guess;
       }),
-    ]);
-  }, [guesses, selectedLetter]);
+    ];
+    setGuesses(newGuesses);
+    updateGuesses(newGuesses);
+  }, [guesses, selectedLetter, updateGuesses]);
 
   const onKeydown = useCallback(
     (event: KeyboardEvent) => {
