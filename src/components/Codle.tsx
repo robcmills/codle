@@ -13,15 +13,13 @@ import { ALPHABET, NUMBER_OF_TRIES } from "codle/constants";
 import { type Language } from "codle/types/Language";
 import { type Game } from "codle/types/Game";
 import { type ClientGuess } from "codle/types/ClientGuess";
-import { useRouter } from "next/router";
+import { getClientGuesses } from "codle/utils/getClientGuesses";
+import { replaceUrl } from "codle/utils/replaceUrl";
 
-export function Codle({
-  isSignedIn,
-  game,
-}: {
-  isSignedIn: boolean;
-  game?: Game;
-}) {
+export function Codle(props: { isSignedIn: boolean; game?: Game }) {
+  const { isSignedIn } = props;
+  const [game, setGame] = useState<Game | undefined>(props.game);
+
   const languageInitialState = (game?.language as Language) ?? "JavaScript";
   const [language, setLanguage] = useState<Language>(languageInitialState);
 
@@ -116,37 +114,40 @@ export function Codle({
     if (isSolved) celebrate();
   }, [isSolved]);
 
-  const {
-    mutateAsync: createGame,
-    isLoading: isCreatingNextGame,
-    isSuccess: isNextGameCreated,
-  } = api.game.create.useMutation();
-  const router = useRouter();
+  const { mutateAsync: createGame, isLoading: isCreatingNextGame } =
+    api.game.create.useMutation();
 
-  const restart = (withLanguage: Language = language) => {
-    setGuesses(guessesInitialState);
-    setCodle(getRandomCodle({ language: withLanguage, exclude: [] }));
+  const startNewGame = async (withLanguage: Language = language) => {
+    if (isSignedIn) {
+      const nextGame = await createGame({ language: withLanguage });
+      replaceUrl(`/games/${nextGame.id}`);
+      setGame(nextGame);
+      setGuesses(getClientGuesses(nextGame.guesses));
+      setCodle(nextGame.codle);
+    } else {
+      setGame(undefined);
+      setGuesses(guessesInitialState);
+      setCodle(getRandomCodle({ language: withLanguage, exclude: [] }));
+    }
+    setLanguage(withLanguage);
   };
 
   const onChangeLanguage = (newLanguage: Language) => {
-    setLanguage(newLanguage);
-    if (newLanguage !== language) {
-      restart(newLanguage);
-    }
+    if (newLanguage === language) return;
+    startNewGame(newLanguage).catch(console.error);
   };
 
-  const onClickPlayAgain = async () => {
-    if (isSignedIn) {
-      const nextGame = await createGame({ language });
-      router.push(`/games/${nextGame.id}`).catch(console.error);
-    } else {
-      restart();
-    }
+  const onClickPlayAgain = () => {
+    startNewGame().catch(console.error);
   };
 
   return (
     <div className="container grid justify-items-center gap-4 p-4 text-white">
-      <LanguageSelect language={language} onChange={onChangeLanguage} />
+      {isCreatingNextGame ? (
+        <p className="p-2">Loading...</p>
+      ) : (
+        <LanguageSelect language={language} onChange={onChangeLanguage} />
+      )}
       <div className="grid w-full grid-cols-1 justify-center gap-4 py-2">
         {guesses.map((guess, index) => (
           <Guess
@@ -167,7 +168,7 @@ export function Codle({
         />
       )}
       {isGameOver ? (
-        isCreatingNextGame || isNextGameCreated ? (
+        isCreatingNextGame ? (
           <p className="p-2">Loading...</p>
         ) : (
           <Button text="Play Again" onClick={onClickPlayAgain} />

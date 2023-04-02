@@ -1,8 +1,9 @@
-import { useUser } from "@clerk/nextjs";
-import { Codle } from "codle/components/Codle";
-import { api } from "codle/utils/api";
 import { type NextPage } from "next";
 import { useRouter } from "next/router";
+import { useUser } from "@clerk/nextjs";
+
+import { api } from "codle/utils/api";
+import { Codle } from "codle/components/Codle";
 
 // Todo: Redirect to /play if not signed in
 
