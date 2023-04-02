@@ -2,6 +2,7 @@ import { type AppType } from "next/app";
 import Head from "next/head";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import { api } from "codle/utils/api";
 
@@ -19,6 +20,7 @@ const App: AppType = ({ Component, pageProps }) => {
       <Layout>
         <Component {...pageProps} />
       </Layout>
+      {false && <ReactQueryDevtools initialIsOpen={false} />}
     </ClerkProvider>
   );
 };

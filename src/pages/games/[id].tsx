@@ -7,12 +7,12 @@ import { api } from "codle/utils/api";
 import { Codle } from "codle/components/Codle";
 
 const GamePage: NextPage = () => {
-  const { isSignedIn } = useUser();
+  const { isSignedIn, isLoaded } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isSignedIn) router.push("/play").catch(console.error);
-  }, [isSignedIn, router]);
+    if (isLoaded && !isSignedIn) router.push("/play").catch(console.error);
+  }, [isLoaded, isSignedIn, router]);
 
   let id = router.query.id;
   if (Array.isArray(id)) {
@@ -25,7 +25,7 @@ const GamePage: NextPage = () => {
   const { data: game, isLoading } = api.game.getById.useQuery(
     { id },
     {
-      enabled: isSignedIn && id !== "",
+      enabled: !!isSignedIn && !!id,
     }
   );
 
