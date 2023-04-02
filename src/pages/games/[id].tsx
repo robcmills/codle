@@ -1,15 +1,19 @@
 import { type NextPage } from "next";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useUser } from "@clerk/nextjs";
 
 import { api } from "codle/utils/api";
 import { Codle } from "codle/components/Codle";
 
-// Todo: Redirect to /play if not signed in
-
 const GamePage: NextPage = () => {
   const { isSignedIn } = useUser();
   const router = useRouter();
+
+  useEffect(() => {
+    if (!isSignedIn) router.push("/play").catch(console.error);
+  }, [isSignedIn, router]);
+
   let id = router.query.id;
   if (Array.isArray(id)) {
     id = id[0];
@@ -21,7 +25,7 @@ const GamePage: NextPage = () => {
   const { data: game, isLoading } = api.game.getById.useQuery(
     { id },
     {
-      enabled: id !== "",
+      enabled: isSignedIn && id !== "",
     }
   );
 

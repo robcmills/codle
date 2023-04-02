@@ -1,9 +1,12 @@
+import { useRouter } from "next/router";
+import { useState } from "react";
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
+
 import { UserAvatar } from "codle/components/UserAvatar";
 import { getPlayerDisplayName } from "codle/utils/getPlayerDisplayName";
-import { useState } from "react";
 
 export function User() {
+  const router = useRouter();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { isSignedIn, user } = useUser();
 
@@ -13,6 +16,10 @@ export function User() {
 
   const onClickDropdownScreen = () => {
     setIsDropdownOpen(false);
+  };
+
+  const signOutCallback = () => {
+    router.push("/").catch(console.error);
   };
 
   const signedIn = !user ? null : (
@@ -31,7 +38,7 @@ export function User() {
               </span>
             </p>
             <p className="text-yellow-500">
-              <SignOutButton />
+              <SignOutButton signOutCallback={signOutCallback} />
             </p>
           </div>
         </div>
@@ -39,5 +46,5 @@ export function User() {
     </div>
   );
 
-  return isSignedIn ? signedIn : <SignInButton />;
+  return isSignedIn ? signedIn : <SignInButton afterSignInUrl="/" />;
 }
