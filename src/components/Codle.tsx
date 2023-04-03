@@ -69,6 +69,7 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
 
   useEffect(() => {
     if (isGameOver && isSignedIn && !isUpdating) {
+      // Todo: figure why the modal is reopening after closing
       setIsProgressOpen(true);
     }
   }, [isGameOver, isSignedIn, isUpdating]);
