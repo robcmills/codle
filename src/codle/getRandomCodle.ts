@@ -988,6 +988,7 @@ export function getRandomCodle({
 }) {
   let keywords = CODLES[language] as unknown as string[];
   keywords = keywords.filter((keyword) => !exclude.includes(keyword));
+  if (keywords.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * keywords.length);
   return keywords[randomIndex] as string;
 }

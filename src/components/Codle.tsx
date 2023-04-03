@@ -4,6 +4,7 @@ import { Button } from "codle/components/Button";
 import { Guess } from "codle/components/Guess";
 import { Keyboard } from "codle/components/Keyboard";
 import { LanguageSelect } from "codle/components/LanguageSelect";
+import { Progress } from "codle/components/Progress";
 
 import { api } from "codle/utils/api";
 import { celebrate } from "codle/celebrate";
@@ -15,6 +16,8 @@ import { type Game } from "codle/types/Game";
 import { type ClientGuess } from "codle/types/ClientGuess";
 import { getClientGuesses } from "codle/utils/getClientGuesses";
 import { replaceUrl } from "codle/utils/replaceUrl";
+import { useQueryClient } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 
 export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   const { isSignedIn } = props;
@@ -24,7 +27,7 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   const [language, setLanguage] = useState<Language>(languageInitialState);
 
   const codleInitialState =
-    game?.codle ?? getRandomCodle({ language, exclude: [] });
+    game?.codle ?? (getRandomCodle({ language, exclude: [] }) as string);
   const [codle, setCodle] = useState(codleInitialState);
 
   const guessesInitialState: ClientGuess[] = [];
@@ -38,7 +41,17 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   }
   const [guesses, setGuesses] = useState<ClientGuess[]>(guessesInitialState);
 
-  const { mutate: updateGame } = api.game.update.useMutation();
+  const [isProgressOpen, setIsProgressOpen] = useState(false);
+
+  const queryClient = useQueryClient();
+  const { mutate: updateGame, isLoading: isUpdating } =
+    api.game.update.useMutation({
+      onSuccess: () => {
+        queryClient
+          .invalidateQueries(getQueryKey(api.game.progress))
+          .catch(console.error);
+      },
+    });
 
   const updateGuesses = useCallback(
     (newGuesses: ClientGuess[]) => {
@@ -53,6 +66,12 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   );
   const isGameOver = isSolved || isFull;
   const isCodleRevealed = !isSolved && isFull;
+
+  useEffect(() => {
+    if (isGameOver && isSignedIn && !isUpdating) {
+      setIsProgressOpen(true);
+    }
+  }, [isGameOver, isSignedIn, isUpdating]);
 
   const selectedLetter = isSolved
     ? null
@@ -134,7 +153,9 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
     } else {
       setGame(undefined);
       setGuesses(guessesInitialState);
-      setCodle(getRandomCodle({ language: withLanguage, exclude: [] }));
+      setCodle(
+        getRandomCodle({ language: withLanguage, exclude: [] }) as string
+      );
     }
     setLanguage(withLanguage);
   };
@@ -182,6 +203,9 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
         )
       ) : (
         <Keyboard deleteLetter={deleteLetter} setLetter={setLetter} />
+      )}
+      {isProgressOpen && (
+        <Progress close={() => setIsProgressOpen(false)} language={language} />
       )}
     </div>
   );
