@@ -4,7 +4,10 @@ export function CircularProgress({ percentage = 100 }: { percentage: number }) {
   const [offset, setOffset] = useState(100);
 
   useEffect(() => {
-    setOffset(100 - percentage);
+    // Let at least one render happen, else the transition will not trigger
+    setTimeout(() => {
+      setOffset(100 - percentage);
+    }, 1);
   }, [percentage]);
 
   const size = 150;

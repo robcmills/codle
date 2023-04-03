@@ -54,11 +54,11 @@ export function Progress({
         </p>
         <p>
           <span className="text-gray-400">Solve rate:</span>
-          &nbsp;
+          &nbsp;&nbsp;
           <span className="text-2xl text-green-500">
             {languageProgressSolvedPercentage}%
           </span>
-          &nbsp;({languageProgress.solved}/{languageProgress.played})
+          &nbsp;&nbsp;{languageProgress.solved} / {languageProgress.played}
         </p>
       </div>
     </div>
