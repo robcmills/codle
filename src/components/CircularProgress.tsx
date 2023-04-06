@@ -1,3 +1,4 @@
+import { celebrate } from "codle/celebrate";
 import { useEffect, useState } from "react";
 
 export function CircularProgress({ percentage = 100 }: { percentage: number }) {
@@ -8,6 +9,12 @@ export function CircularProgress({ percentage = 100 }: { percentage: number }) {
     setTimeout(() => {
       setOffset(100 - percentage);
     }, 1);
+
+    if (percentage === 100) {
+      setTimeout(() => {
+        celebrate("stars");
+      }, 1000);
+    }
   }, [percentage]);
 
   const size = 150;
@@ -41,7 +48,7 @@ export function CircularProgress({ percentage = 100 }: { percentage: number }) {
         pathLength={100}
         r={radius}
         stroke="#FF9F1E"
-        strokeDasharray={100}
+        strokeDasharray={101}
         strokeDashoffset={offset}
         strokeWidth={strokeWidth}
         style={{

@@ -8,7 +8,8 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
 ### Todo
 
 - [x] Optimize queries generally not to run so often
-  + Especially updateGame (skip if no changes, should not run on initial render)
+  + [ ] Especially updateGame (skip if no changes, should not run on initial render)
+  + [ ] Cancel updateGame requests when new ones are triggered
 - [x] Handle Sign out at any point
 - [ ] Account for scenario where all keywords have been solved for a language (100% progress) (badges)
 - [ ] Account for scenario where all keywords have been solved for all languages (extra special badge)
@@ -22,4 +23,3 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
   + [ ] Most accurate (highest solve rate with fewest guesses)
   + [ ] Best overall (aggregate leaders)
 - [ ] Implement bot to play game and compete for highest score possible
-
