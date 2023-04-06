@@ -1,3 +1,5 @@
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server";
+
 import { createGame } from "codle/server/api/createGame";
 import { createTRPCRouter } from "codle/server/api/trpc";
 import { getGame } from "codle/server/api/getGame";
@@ -12,3 +14,6 @@ export const gameRouter = createTRPCRouter({
   progress: getProgress,
   update: updateGame,
 });
+
+export type GameRouterInput = inferRouterInputs<typeof gameRouter>;
+export type GameRouterOutput = inferRouterOutputs<typeof gameRouter>;

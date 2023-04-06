@@ -1,23 +1,21 @@
 import { useUser } from "@clerk/nextjs";
 import { CircularProgress } from "codle/components/CircularProgress";
+import { type GameRouterOutput } from "codle/server/api/routers/game";
 import { type Language } from "codle/types/Language";
 
-import { api } from "codle/utils/api";
 import { getPlayerDisplayName } from "codle/utils/getPlayerDisplayName";
 
 export function Progress({
   close,
   language,
+  progress,
 }: {
   close: () => void;
   language: Language;
+  progress: GameRouterOutput["progress"];
 }) {
   const { isSignedIn, user } = useUser();
-  const { data: progress, isFetching } = api.game.progress.useQuery(undefined, {
-    enabled: !!isSignedIn,
-  });
-
-  if (!isSignedIn || !progress || !user || isFetching) return null;
+  if (!isSignedIn || !user) return null;
 
   const onClickScreen = () => {
     close();

@@ -18,6 +18,7 @@ import { getClientGuesses } from "codle/utils/getClientGuesses";
 import { replaceUrl } from "codle/utils/replaceUrl";
 import { useQueryClient } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
+import { getIsLanguageCompleted } from "codle/utils/getIsLanguageCompleted";
 
 export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   const { isSignedIn } = props;
@@ -43,6 +44,11 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
 
   const [isProgressOpen, setIsProgressOpen] = useState(false);
 
+  const { data: progress, isFetching: isFetchingProgress } =
+    api.game.progress.useQuery(undefined, {
+      enabled: isSignedIn,
+    });
+
   const queryClient = useQueryClient();
   const { mutate: updateGame, isLoading: isUpdating } =
     api.game.update.useMutation({
@@ -66,6 +72,11 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
   );
   const isGameOver = isSolved || isFull;
   const isCodleRevealed = !isSolved && isFull;
+  const isLanguageCompleted =
+    !isFetchingProgress &&
+    !!progress &&
+    getIsLanguageCompleted(progress, language);
+  const isProgressVisible = isProgressOpen && !!progress && !isFetchingProgress;
 
   useEffect(() => {
     if (isGameOver && isSignedIn && !isUpdating) {
@@ -175,7 +186,11 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
       {isCreatingNextGame ? (
         <p className="p-2">Loading...</p>
       ) : (
-        <LanguageSelect language={language} onChange={onChangeLanguage} />
+        <LanguageSelect
+          language={language}
+          onChange={onChangeLanguage}
+          progress={progress}
+        />
       )}
       <div className="grid w-full grid-cols-1 justify-center gap-4 py-2">
         {guesses.map((guess, index) => (
@@ -197,16 +212,24 @@ export function Codle(props: { isSignedIn: boolean; game?: Game }) {
         />
       )}
       {isGameOver ? (
-        isCreatingNextGame ? (
+        isCreatingNextGame || isFetchingProgress ? (
           <p className="p-2">Loading...</p>
+        ) : isLanguageCompleted ? (
+          <p className="">
+            {language} completed ✓ Nice! Please choose another language.
+          </p>
         ) : (
           <Button text="Play Again" onClick={onClickPlayAgain} />
         )
       ) : (
         <Keyboard deleteLetter={deleteLetter} setLetter={setLetter} />
       )}
-      {isProgressOpen && (
-        <Progress close={() => setIsProgressOpen(false)} language={language} />
+      {isProgressVisible && (
+        <Progress
+          close={() => setIsProgressOpen(false)}
+          language={language}
+          progress={progress}
+        />
       )}
     </div>
   );
