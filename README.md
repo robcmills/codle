@@ -11,7 +11,7 @@ This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3
   + [ ] Especially updateGame (skip if no changes, should not run on initial render)
   + [ ] Cancel updateGame requests when new ones are triggered
 - [x] Handle Sign out at any point
-- [ ] Account for scenario where all keywords have been solved for a language (100% progress) (badges)
+- [x] Account for scenario where all keywords have been solved for a language (100% progress) (badges)
 - [ ] Account for scenario where all keywords have been solved for all languages (extra special badge)
 - [ ] Replace loading texts with spinners
 - [ ] Obfuscate / encrypt codles in request payloads to prevent cheating
