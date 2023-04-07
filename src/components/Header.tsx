@@ -10,7 +10,7 @@ export function Header() {
       <Link href="/" className="text-center text-5xl font-bold">
         Codle
       </Link>
-      <div className="absolute top-0 right-0 bottom-0 grid p-5">
+      <div className="absolute top-4 right-4">
         <User />
       </div>
     </div>

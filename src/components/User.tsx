@@ -30,7 +30,7 @@ export function User() {
           className="fixed top-0 bottom-0 left-0 right-0"
           onClick={onClickDropdownScreen}
         >
-          <div className="absolute top-14 right-14 grid gap-2 whitespace-nowrap rounded-md border border-gray-500 bg-zinc-900 p-4 text-center">
+          <div className="absolute top-14 right-4 grid gap-4 whitespace-nowrap rounded-md border border-gray-500 bg-zinc-900 p-4 text-right">
             <p>
               Signed in as{" "}
               <span className="text-green-500">
