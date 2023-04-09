@@ -21,13 +21,8 @@ export function Progress({
     close();
   };
 
-  const languageProgress = progress.gamesPlayedByLanguage[language];
-  const languageProgressPlayedPercentage = Math.round(
-    (languageProgress.played / languageProgress.total) * 100
-  );
-  const languageProgressSolvedPercentage = Math.round(
-    (languageProgress.solved / languageProgress.played) * 100
-  );
+  const { played, playedPercentage, solved, solvedPercentage, total } =
+    progress.progressByLanguage[language];
 
   return (
     <div
@@ -41,22 +36,20 @@ export function Progress({
         </p>
         <p className="text-3xl text-yellow-500">{language}</p>
         <div className="relative">
-          <CircularProgress percentage={languageProgressPlayedPercentage} />
+          <CircularProgress percentage={playedPercentage} />
           <p className="absolute top-[50%] left-[50%] -translate-x-1/2 -translate-y-1/2 text-4xl text-yellow-500">
-            {languageProgressPlayedPercentage}%
+            {playedPercentage}%
           </p>
         </div>
         <p>
-          {languageProgress.played} / {languageProgress.total}
+          {played} / {total}
           <span className="text-gray-400">&nbsp; Codles completed</span>
         </p>
         <p>
           <span className="text-gray-400">Solve rate:</span>
           &nbsp;&nbsp;
-          <span className="text-2xl text-green-500">
-            {languageProgressSolvedPercentage}%
-          </span>
-          &nbsp;&nbsp;{languageProgress.solved} / {languageProgress.played}
+          <span className="text-2xl text-green-500">{solvedPercentage}%</span>
+          &nbsp;&nbsp;{solved} / {played}
         </p>
       </div>
     </div>

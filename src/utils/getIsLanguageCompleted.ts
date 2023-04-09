@@ -5,6 +5,6 @@ export function getIsLanguageCompleted(
   progress: GameRouterOutput["progress"],
   language: Language
 ) {
-  const { played, total } = progress.gamesPlayedByLanguage[language];
+  const { played, total } = progress.progressByLanguage[language];
   return played === total;
 }
